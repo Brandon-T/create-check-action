@@ -1,0 +1,40 @@
+name: "build"
+
+on: 
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ./
+      id: create_check_run
+      with: 
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        check_names: '["test"]'
+        statuses: '["in_progress"]'
+        conclusions: '[]'
+        ref: master
+
+    - name: Sleeping
+      run: |
+        echo CHECK-RUN IDs: ${{ steps.create_check_run.outputs.result }}
+        sleep 5
+
+    - uses: Brandon-T/update-check-action@v1
+      id: update_check_run
+      with: 
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        check_ids: '${{ steps.create_check_run.outputs.result }}'
+        statuses: '["completed"]'
+        conclusions: '["success"]'
+
+    - name: Print Check-Run IDs
+      run: |
+        echo steps.update_check_run.outputs.result
+        echo CHECK-RUN IDs: ${{ steps.update_check_run.outputs.result }}

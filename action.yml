@@ -1,0 +1,33 @@
+name: 'create-check-run'
+description: 'Creates check-runs.'
+
+inputs:
+  github_token:
+    description: 'GitHub token or secret'
+    required: true
+  check_names:
+    description: 'A list of check-run names (formatted as a JSON array)'
+    required: true
+  statuses:
+    description: 'A list of check-run statuses (formatted as a JSON array)'
+    required: true
+  conclusions:
+    description: 'A list of check-run conclusions OR an empty array (formatted as a JSON array)'
+    required: false
+  owner:
+    description: 'Repository Owner'
+    required: false
+  repo:
+    description: 'Repository Name'
+    required: false
+  ref:
+    description: 'Commit hash, tag, or branch name'
+    required: false
+
+outputs:
+  result: 
+    description: 'JSON array of check-run IDs [1234, 5678].'
+
+runs:
+  using: 'node12'
+  main: 'src/index.js'
